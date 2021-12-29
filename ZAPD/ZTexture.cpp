@@ -719,6 +719,7 @@ TextureType ZTexture::GetTextureType() const
 	return format;
 }
 
+
 void ZTexture::Save(const fs::path& outFolder)
 {
 	// Optionally generate text file containing CRC information. This is going to be a one time

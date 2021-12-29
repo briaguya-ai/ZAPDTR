@@ -48,7 +48,11 @@ public:
 
 	size_t GetRawDataSize() const override;
 
-	std::string GetLimbEnumName(uint8_t limbIndex) const;
+protected:
+	ZLimbType limbType = ZLimbType::Standard;
+	size_t count = 0;
+
+	std::vector<segptr_t> limbsAddresses;
 };
 
 class ZSkeleton : public ZResource
@@ -63,6 +67,7 @@ public:
 	segptr_t limbsArrayAddress;
 	uint8_t limbCount = 0;
 	uint8_t dListCount = 0;  // FLEX SKELETON ONLY
+	ZLimbTable limbsTable;
 
 	ZSkeleton(ZFile* nParent);
 
@@ -81,5 +86,5 @@ public:
 	uint8_t GetLimbCount();
 
 protected:
-	ZLimbTable* limbsTable = nullptr;  // borrowed pointer, do not delete!
+	ZLimbTable limbsTable;
 };
