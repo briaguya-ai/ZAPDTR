@@ -17,6 +17,7 @@ ZSkeleton::ZSkeleton(ZFile* nParent) : ZResource(nParent)
 	RegisterOptionalAttribute("EnumName");
 	RegisterOptionalAttribute("LimbNone");
 	RegisterOptionalAttribute("LimbMax");
+	genOTRDef = true;
 }
 
 void ZSkeleton::ParseXML(tinyxml2::XMLElement* reader)

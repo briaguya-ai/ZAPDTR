@@ -12,6 +12,7 @@ REGISTER_ZFILENODE(Collision, ZCollisionHeader);
 
 ZCollisionHeader::ZCollisionHeader(ZFile* nParent) : ZResource(nParent)
 {
+	genOTRDef = true;
 }
 
 ZCollisionHeader::~ZCollisionHeader()
