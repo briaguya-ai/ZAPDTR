@@ -54,6 +54,7 @@ enum class ZResourceType
 	TextureAnimationParams,
 	Vector,
 	Vertex,
+	Text
 };
 
 class ResourceAttribute
