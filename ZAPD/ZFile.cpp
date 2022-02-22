@@ -402,10 +402,10 @@ void ZFile::ExtractResources()
 
 		totalMs += diff;
 
-		printf("Res %s in %lims\n", res->GetName().c_str(), diff);
+		//printf("Res %s in %lims\n", res->GetName().c_str(), diff);
 	}
 
-	printf("File %s in %lims\n", GetName().c_str(), totalMs);
+	//printf("File %s in %lims\n", GetName().c_str(), totalMs);
 
 	if (memStreamFile->GetLength() > 0)
 	{
