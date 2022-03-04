@@ -291,6 +291,7 @@ std::string ZResource::GetSourceOutputHeader([[maybe_unused]] const std::string&
 		std::string nameStr = StringHelper::Strip(StringHelper::Strip(name, "\n"), "\r");
 
 		std::string outName = parent->GetOutName();
+		std::string prefix = "";
 
 		if (GetResourceType() == ZResourceType::DisplayList || GetResourceType() == ZResourceType::Texture)
 		{
@@ -300,9 +301,15 @@ std::string ZResource::GetSourceOutputHeader([[maybe_unused]] const std::string&
 			{
 				outName = StringHelper::Split(outName, "_room")[0] + "_scene";
 			}
+
+			if (StringHelper::Contains(outName, "_room_") || StringHelper::Contains(outName, "_scene"))
+				prefix = "scenes";
 		}
 
-		str += StringHelper::Sprintf("#define %s \"__OTR__%s/%s\"", name.c_str(), outName.c_str(), nameStr.c_str());
+		if (prefix != "")
+			str += StringHelper::Sprintf("#define %s \"__OTR__%s/%s/%s\"", name.c_str(), prefix.c_str(), outName.c_str(), nameStr.c_str());
+		else
+			str += StringHelper::Sprintf("#define %s \"__OTR__%s/%s\"", name.c_str(), outName.c_str(), nameStr.c_str());
 
 		return str;
 	}
