@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.props" Condition="Exists('..\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.props')" />
+  <Import Project="..\..\OTRExporter\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.props" Condition="Exists('..\..\OTRExporter\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -72,11 +72,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(OutDir);$(ProjectDir)..\lib\libgfxd;$(ProjectDir)..\packages\libpng-v142.1.6.37.2\build\native\lib\x64\v142\Debug\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(OutDir);$(ProjectDir)..\lib\libgfxd;$(ProjectDir)..\..\OTRExporter\packages\libpng-v142.1.6.37.2\build\native\lib\x64\v142\Debug\;$(ProjectDir)..\..\libultraship\libultraship\;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)..\ZAPDUtils;$(ProjectDir)..\lib\tinyxml2;$(ProjectDir)..\lib\libgfxd;$(ProjectDir)..\lib\elfio;$(ProjectDir)..\lib\stb;$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\ZAPDUtils;$(ProjectDir)..\lib\tinyxml2;$(ProjectDir)..\lib\libgfxd;$(ProjectDir)..\lib\elfio;$(ProjectDir)..\lib\stb;$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(OutDir);$(ProjectDir)..\lib\libgfxd;$(ProjectDir)..\..\OTRExporter\packages\libpng-v142.1.6.37.2\build\native\lib\x64\v142\Debug\;$(ProjectDir)..\..\libultraship\libultraship\;$(LibraryPath)</LibraryPath>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)ZAPD\lib\tinyxml2;$(SolutionDir)ZAPD\lib\libgfxd;$(SolutionDir)ZAPD\lib\elfio;$(SolutionDir)ZAPD\lib\stb;$(ProjectDir);$(IncludePath)</IncludePath>
@@ -91,17 +93,10 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <Profile>true</Profile>
-      <SubSystem>Console</SubSystem>
     </Link>
-    <PreBuildEvent>
-      <Command>cd ..
-mkdir build\ZAPD
- python ZAPD/genbuildinfo.py</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -114,19 +109,20 @@ mkdir build\ZAPD
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <Profile>true</Profile>
-      <AdditionalDependencies>ZAPDUtils.lib;/WHOLEARCHIVE:ExporterExample.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ZAPDUtils.lib;/WHOLEARCHIVE:OTRExporter.lib;libultraship.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <SubSystem>Console</SubSystem>
     </Link>
     <PreBuildEvent>
-      <Command>cd ..
-mkdir build\ZAPD
- python ZAPD/genbuildinfo.py</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -136,42 +132,36 @@ mkdir build\ZAPD
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <PreBuildEvent>
-      <Command>cd ..
-mkdir build\ZAPD
- python ZAPD/genbuildinfo.py</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>ZAPDUtils.lib;/WHOLEARCHIVE:OTRExporter.lib;libultraship.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PreBuildEvent>
-      <Command>cd ..
-mkdir build\ZAPD
- python ZAPD/genbuildinfo.py</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\build\ZAPD\BuildInfo.cpp" />
     <ClCompile Include="..\lib\libgfxd\gfxd.c" />
     <ClCompile Include="..\lib\libgfxd\uc.c" />
     <ClCompile Include="..\lib\libgfxd\uc_f3d.c" />
@@ -179,21 +169,18 @@ mkdir build\ZAPD
     <ClCompile Include="..\lib\libgfxd\uc_f3dex.c" />
     <ClCompile Include="..\lib\libgfxd\uc_f3dex2.c" />
     <ClCompile Include="..\lib\libgfxd\uc_f3dexb.c" />
-    <ClCompile Include="CrashHandler.cpp" />
     <ClCompile Include="Declaration.cpp" />
     <ClCompile Include="GameConfig.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="ImageBackend.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="OtherStructs\CutsceneMM_Commands.cpp" />
-    <ClCompile Include="OtherStructs\Cutscene_Commands.cpp" />
     <ClCompile Include="OtherStructs\SkinLimbStructs.cpp" />
     <ClCompile Include="OutputFormatter.cpp" />
+    <ClCompile Include="Overlays\ZOverlay.cpp" />
     <ClCompile Include="WarningHandler.cpp" />
-    <ClCompile Include="ZActorList.cpp" />
     <ClCompile Include="ZArray.cpp" />
     <ClCompile Include="ZBackground.cpp" />
-    <ClCompile Include="ZCollisionPoly.cpp" />
+    <ClCompile Include="ZCutsceneMM.cpp" />
     <ClCompile Include="ZLimb.cpp" />
     <ClCompile Include="ZMtx.cpp" />
     <ClCompile Include="ZPath.cpp" />
@@ -243,8 +230,8 @@ mkdir build\ZAPD
     <ClCompile Include="ZRoom\ZRoom.cpp" />
     <ClCompile Include="ZRoom\ZRoomCommand.cpp" />
     <ClCompile Include="ZString.cpp" />
-    <ClCompile Include="ZSurfaceType.cpp" />
     <ClCompile Include="ZSymbol.cpp" />
+    <ClCompile Include="ZText.cpp" />
     <ClCompile Include="ZTexture.cpp" />
     <ClCompile Include="ZTextureAnimation.cpp" />
     <ClCompile Include="ZVector.cpp" />
@@ -269,25 +256,22 @@ mkdir build\ZAPD
     <ClInclude Include="..\lib\stb\stb_image.h" />
     <ClInclude Include="..\lib\stb\stb_image_write.h" />
     <ClInclude Include="..\lib\stb\tinyxml2.h" />
-    <ClInclude Include="CrashHandler.h" />
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="Declaration.h" />
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="ImageBackend.h" />
-    <ClInclude Include="OtherStructs\CutsceneMM_Commands.h" />
-    <ClInclude Include="OtherStructs\Cutscene_Commands.h" />
     <ClInclude Include="OtherStructs\SkinLimbStructs.h" />
     <ClInclude Include="OutputFormatter.h" />
+    <ClInclude Include="Overlays\ZOverlay.h" />
     <ClInclude Include="WarningHandler.h" />
-    <ClInclude Include="ZActorList.h" />
     <ClInclude Include="ZAnimation.h" />
     <ClInclude Include="ZArray.h" />
     <ClInclude Include="ZBackground.h" />
     <ClInclude Include="ZBlob.h" />
     <ClInclude Include="ZCollision.h" />
-    <ClInclude Include="ZCollisionPoly.h" />
     <ClInclude Include="ZCutscene.h" />
+    <ClInclude Include="ZCutsceneMM.h" />
     <ClInclude Include="ZDisplayList.h" />
     <ClInclude Include="ZFile.h" />
     <ClInclude Include="ZLimb.h" />
@@ -333,8 +317,8 @@ mkdir build\ZAPD
     <ClInclude Include="ZRoom\ZRoom.h" />
     <ClInclude Include="ZRoom\ZRoomCommand.h" />
     <ClInclude Include="ZString.h" />
-    <ClInclude Include="ZSurfaceType.h" />
     <ClInclude Include="ZSymbol.h" />
+    <ClInclude Include="ZText.h" />
     <ClInclude Include="ZTexture.h" />
     <ClInclude Include="ZTextureAnimation.h" />
     <ClInclude Include="ZVector.h" />
@@ -352,21 +336,21 @@ mkdir build\ZAPD
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('..\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets')" />
-    <Import Project="..\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('..\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" />
-    <Import Project="..\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.targets" Condition="Exists('..\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.targets')" />
-    <Import Project="..\packages\zlib.static.1.2.5\build\native\zlib.static.targets" Condition="Exists('..\packages\zlib.static.1.2.5\build\native\zlib.static.targets')" />
-    <Import Project="..\packages\libpng.static.1.6.37\build\native\libpng.static.targets" Condition="Exists('..\packages\libpng.static.1.6.37\build\native\libpng.static.targets')" />
+    <Import Project="..\..\OTRExporter\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('..\..\OTRExporter\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets')" />
+    <Import Project="..\..\OTRExporter\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('..\..\OTRExporter\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" />
+    <Import Project="..\..\OTRExporter\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.targets" Condition="Exists('..\..\OTRExporter\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.targets')" />
+    <Import Project="..\..\OTRExporter\packages\zlib.static.1.2.5\build\native\zlib.static.targets" Condition="Exists('..\..\OTRExporter\packages\zlib.static.1.2.5\build\native\zlib.static.targets')" />
+    <Import Project="..\..\OTRExporter\packages\libpng.static.1.6.37\build\native\libpng.static.targets" Condition="Exists('..\..\OTRExporter\packages\libpng.static.1.6.37\build\native\libpng.static.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
-    <Error Condition="!Exists('..\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
-    <Error Condition="!Exists('..\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.props'))" />
-    <Error Condition="!Exists('..\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.targets'))" />
-    <Error Condition="!Exists('..\packages\zlib.static.1.2.5\build\native\zlib.static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.static.1.2.5\build\native\zlib.static.targets'))" />
-    <Error Condition="!Exists('..\packages\libpng.static.1.6.37\build\native\libpng.static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpng.static.1.6.37\build\native\libpng.static.targets'))" />
+    <Error Condition="!Exists('..\..\OTRExporter\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\OTRExporter\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
+    <Error Condition="!Exists('..\..\OTRExporter\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\OTRExporter\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
+    <Error Condition="!Exists('..\..\OTRExporter\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\OTRExporter\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.props'))" />
+    <Error Condition="!Exists('..\..\OTRExporter\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\OTRExporter\packages\YY.NuGet.Import.Helper.1.0.0.4\build\native\YY.NuGet.Import.Helper.targets'))" />
+    <Error Condition="!Exists('..\..\OTRExporter\packages\zlib.static.1.2.5\build\native\zlib.static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\OTRExporter\packages\zlib.static.1.2.5\build\native\zlib.static.targets'))" />
+    <Error Condition="!Exists('..\..\OTRExporter\packages\libpng.static.1.6.37\build\native\libpng.static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\OTRExporter\packages\libpng.static.1.6.37\build\native\libpng.static.targets'))" />
   </Target>
 </Project>
