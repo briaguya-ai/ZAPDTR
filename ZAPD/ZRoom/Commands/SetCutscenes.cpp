@@ -99,6 +99,8 @@ void SetCutscenes::DeclareReferences(const std::string& prefix)
 std::string SetCutscenes::GetBodySourceCode() const
 {
 	std::string listName;
+	Globals::Instance->GetSegmentedPtrName(cmdArg2, parent, "CutsceneData", listName,
+	                                       parent->workerID);
 
 	if (Globals::Instance->game == ZGame::MM_RETAIL)
 	{

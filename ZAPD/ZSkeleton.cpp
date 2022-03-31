@@ -139,7 +139,8 @@ void ZSkeleton::DeclareReferences(const std::string& prefix)
 std::string ZSkeleton::GetBodySourceCode() const
 {
 	std::string limbArrayName;
-	Globals::Instance->GetSegmentedPtrName(limbsArrayAddress, parent, "", limbArrayName);
+	Globals::Instance->GetSegmentedPtrName(limbsArrayAddress, parent, "", limbArrayName,
+	                                       parent->workerID);
 
 	std::string countStr;
 	assert(limbsTable != nullptr);
@@ -359,7 +360,8 @@ std::string ZLimbTable::GetBodySourceCode() const
 	for (size_t i = 0; i < count; i++)
 	{
 		std::string limbName;
-		Globals::Instance->GetSegmentedPtrName(limbsAddresses[i], parent, "", limbName);
+		Globals::Instance->GetSegmentedPtrName(limbsAddresses[i], parent, "", limbName,
+		                                       parent->workerID);
 		body += StringHelper::Sprintf("\t%s,", limbName.c_str());
 
 		auto& limb = limbsReferences.at(i);
