@@ -6,6 +6,7 @@
 #include <cstring>
 #include <limits>
 #include <vector>
+#include <cstring>
 
 #define ALIGN8(val) (((val) + 7) & ~7)
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)

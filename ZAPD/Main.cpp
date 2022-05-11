@@ -228,7 +228,7 @@ int main(int argc, char* argv[])
 				ctpl::thread_pool pool(num_threads / 2);
 
 				bool parseSuccessful;
-				
+
 				auto start = std::chrono::steady_clock::now();
 				int fileListSize = fileList.size();
 				Globals::Instance->singleThreaded = false;
@@ -379,6 +379,7 @@ int ExtractFunc(int workerID, int fileListSize, std::string fileListItem, ZFileM
 
 		numWorkersLeft--;
 	}
+	return 0;
 }
 
 bool Parse(const fs::path& xmlFilePath, const fs::path& basePath, const fs::path& outPath,
