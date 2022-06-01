@@ -16,6 +16,37 @@
 #include "tinyxml2.h"
 #include <ctpl_stl.h>
 
+<<<<<<< HEAD
+=======
+//extern const char gBuildHash[];
+const char gBuildHash[] = "";
+
+// LINUX_TODO: remove, those are because of soh <-> lus dependency problems
+float divisor_num = 0.0f;
+
+extern "C" void Audio_SetGameVolume(int player_id, float volume)
+{
+
+}
+
+
+extern "C" int ResourceMgr_OTRSigCheck(char* imgData)
+{
+	return 0;
+}
+
+void DebugConsole_SaveCVars()
+{
+
+}
+
+void DebugConsole_LoadCVars()
+{
+
+}
+
+
+>>>>>>> 61eb97b (Merge branch 'zapd_audio_support' into zelda64)
 bool Parse(const fs::path& xmlFilePath, const fs::path& basePath, const fs::path& outPath,
            ZFileMode fileMode, int workerID);
 
@@ -114,19 +145,6 @@ int main(int argc, char* argv[])
 		{
 			Globals::Instance->texType = ZTexture::GetTextureTypeFromString(argv[++i]);
 		}
-<<<<<<< HEAD
-=======
-		else if (arg == "-cfg")  // Set cfg path (for overlays)
-		                         // TODO: Change the name of this to something else so it doesn't
-		                         // get confused with XML config files.
-		{
-			Globals::Instance->cfgPath = argv[++i];
-		}
-		else if (arg == "-fl")  // Set baserom filelist path
-		{
-			Globals::Instance->fileListPath = argv[++i];
-		}
->>>>>>> 5b6d728 (Added support for multiple game versions (#107))
 		else if (arg == "-rconf")  // Read Config File
 		{
 			Globals::Instance->cfg.ReadConfigFile(argv[++i]);
