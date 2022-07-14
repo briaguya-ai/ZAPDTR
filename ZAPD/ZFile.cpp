@@ -808,14 +808,11 @@ void ZFile::GenerateSourceHeaderFiles()
 {
 	OutputFormatter formatter;
 
-	std::string guard = StringHelper::ToUpper(outName.stem().string());
-
-	formatter.Write(
-		StringHelper::Sprintf("#ifndef %s_H\n#define %s_H 1\n\n", guard.c_str(), guard.c_str()));
-
+	formatter.Write("#pragma once\n");
+	std::set<std::string> nameSet;
 	for (ZResource* res : resources)
 	{
-		std::string resSrc = res->GetSourceOutputHeader("");
+		std::string resSrc = res->GetSourceOutputHeader("", &nameSet);
 		formatter.Write(resSrc);
 
 		if (resSrc != "")
@@ -824,7 +821,7 @@ void ZFile::GenerateSourceHeaderFiles()
 
 	for (auto& sym : symbolResources)
 	{
-		formatter.Write(sym.second->GetSourceOutputHeader(""));
+		formatter.Write(sym.second->GetSourceOutputHeader("", &nameSet));
 	}
 
 	formatter.Write(ProcessExterns());
