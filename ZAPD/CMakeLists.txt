@@ -254,7 +254,7 @@ set(ALL_FILES
 add_library(${PROJECT_NAME} STATIC ${ALL_FILES})
 
 find_package(tinyxml2 REQUIRED)
-target_link_libraries(${PROJECT_NAME}  PUBLIC tinyxml2::tinyxml2)
+target_link_libraries(${PROJECT_NAME} PUBLIC tinyxml2::tinyxml2)
 
 add_executable(ZAPD ExecutableMain.cpp)
 target_link_libraries(ZAPD ${PROJECT_NAME})
