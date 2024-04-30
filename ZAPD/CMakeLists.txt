@@ -8,7 +8,6 @@ set(CMAKE_C_STANDARD 11)
 # Source groups
 ################################################################################
 set(Header_Files
-    "../lib/tinyxml2/tinyxml2.h"
     "CRC32.h"
     "Declaration.h"
     "FileWorker.h"
@@ -338,7 +337,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/../../libultraship/extern/ZAPDUtils
     ${CMAKE_CURRENT_SOURCE_DIR}/../../libultraship/src/resource
     ${CMAKE_CURRENT_SOURCE_DIR}/../../libultraship/include
-	${CMAKE_CURRENT_SOURCE_DIR}/../../ZAPDTR/lib/tinyxml2
 	${CMAKE_CURRENT_SOURCE_DIR}/../../ZAPDTR/lib/libgfxd
 	${PNG_PNG_INCLUDE_DIR}/
 	.
