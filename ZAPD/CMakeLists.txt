@@ -230,6 +230,12 @@ set(Source_Files__Z64__ZRoom__Commands
 )
 source_group("Source Files\\Z64\\ZRoom\\Commands" FILES ${Source_Files__Z64__ZRoom__Commands})
 
+file(GLOB Source_Files__Utils RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "Utils/*.c" "Utils/*.cpp")
+source_group("Source Files\\Utils" FILES ${Source_Files__Utils})
+
+file(GLOB Header_Files__Utils RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "Utils/*.h")
+source_group("Header Files\\Utils" FILES ${Header_Files__Utils})
+
 set(ALL_FILES
     ${Header_Files}
     ${Header_Files__Libraries}
@@ -238,6 +244,7 @@ set(ALL_FILES
     ${Header_Files__Z64}
     ${Header_Files__Z64__ZRoom}
     ${Header_Files__Z64__ZRoom__Commands}
+    ${Header_Files__Utils}
     ${Resource_Files}
     ${Source_Files}
     ${Source_Files__Libraries__libgfxd}
@@ -245,6 +252,7 @@ set(ALL_FILES
     ${Source_Files__Z64}
     ${Source_Files__Z64__ZRoom}
     ${Source_Files__Z64__ZRoom__Commands}
+    ${Source_Files__Utils}
     ${any__any}
 )
 
@@ -335,10 +343,8 @@ endif()
 find_package(PNG REQUIRED)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-	${CMAKE_CURRENT_SOURCE_DIR}/../../libultraship/extern/ZAPDUtils
     ${CMAKE_CURRENT_SOURCE_DIR}/../../libultraship/src/resource
     ${CMAKE_CURRENT_SOURCE_DIR}/../../libultraship/include
-	${CMAKE_CURRENT_SOURCE_DIR}/../../ZAPDTR/lib/tinyxml2
 	${CMAKE_CURRENT_SOURCE_DIR}/../../ZAPDTR/lib/libgfxd
 	${PNG_PNG_INCLUDE_DIR}/
 	.
@@ -434,7 +440,6 @@ endif()
 ################################################################################
 add_dependencies(${PROJECT_NAME}
     OTRExporter
-    ZAPDUtils
     libultraship
 )
 
@@ -442,7 +447,6 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 	if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
 		set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 		set(ADDITIONAL_LIBRARY_DEPENDENCIES
-			"ZAPDUtils;"
 			"-WHOLEARCHIVE:$<TARGET_LINKER_FILE_DIR:OTRExporter>/$<TARGET_LINKER_FILE_NAME:OTRExporter>"
 			"libultraship;"
 			storm
@@ -453,7 +457,6 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 	set(THREADS_PREFER_PTHREAD_FLAG ON)
 	find_package(Threads REQUIRED)
 	set(ADDITIONAL_LIBRARY_DEPENDENCIES
-		"ZAPDUtils;"
 		-Wl,-force_load $<TARGET_LINKER_FILE_DIR:OTRExporter>/$<TARGET_LINKER_FILE_NAME:OTRExporter>
 		"libultraship;"
 		PNG::PNG
@@ -464,7 +467,6 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
        set(THREADS_PREFER_PTHREAD_FLAG ON)
        find_package(Threads REQUIRED)
        set(ADDITIONAL_LIBRARY_DEPENDENCIES
-               "ZAPDUtils;"
                -Wl,--whole-archive $<TARGET_LINKER_FILE_DIR:OTRExporter>/$<TARGET_LINKER_FILE_NAME:OTRExporter> -Wl,--no-whole-archive
                "libultraship;"
                PNG::PNG
@@ -472,7 +474,6 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
        )
 elseif(CMAKE_SYSTEM_NAME STREQUAL "CafeOS")
     set(ADDITIONAL_LIBRARY_DEPENDENCIES
-        "ZAPDUtils;"
         "libultraship;"
         PNG::PNG
     )
@@ -480,7 +481,6 @@ else()
 	set(THREADS_PREFER_PTHREAD_FLAG ON)
 	find_package(Threads REQUIRED)
 	set(ADDITIONAL_LIBRARY_DEPENDENCIES
-		"ZAPDUtils;"
 		-Wl,--whole-archive $<TARGET_LINKER_FILE_DIR:OTRExporter>/$<TARGET_LINKER_FILE_NAME:OTRExporter> -Wl,--no-whole-archive
 		"libultraship;"
 		PNG::PNG
