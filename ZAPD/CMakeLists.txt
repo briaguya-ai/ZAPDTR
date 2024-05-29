@@ -26,13 +26,6 @@ set(Header_Files__Libraries
 )
 source_group("Header Files\\Libraries" FILES ${Header_Files__Libraries})
 
-set(Header_Files__Libraries__libgfxd
-    "../lib/libgfxd/gbi.h"
-    "../lib/libgfxd/gfxd.h"
-    "../lib/libgfxd/priv.h"
-)
-source_group("Header Files\\Libraries\\libgfxd" FILES ${Header_Files__Libraries__libgfxd})
-
 set(Header_Files__Yaz0
     "yaz0/readwrite.h"
     "yaz0/yaz0.h"
@@ -140,13 +133,6 @@ set(Source_Files
 )
 source_group("Source Files" FILES ${Source_Files})
 
-set(Source_Files__Libraries__libgfxd
-    "../lib/libgfxd/gfxd.c"
-    "../lib/libgfxd/uc.c"
-    "../lib/libgfxd/uc_f3dex2.c"
-)
-source_group("Source Files\\Libraries\\libgfxd" FILES ${Source_Files__Libraries__libgfxd})
-
 set(Source_Files__Yaz0
     "yaz0/yaz0.cpp"
 )
@@ -245,7 +231,6 @@ source_group("Header Files\\Utils" FILES ${Header_Files__Utils})
 set(ALL_FILES
     ${Header_Files}
     ${Header_Files__Libraries}
-    ${Header_Files__Libraries__libgfxd}
     ${Header_Files__Yaz0}
     ${Header_Files__Z64}
     ${Header_Files__Z64__ZRoom}
@@ -253,7 +238,6 @@ set(ALL_FILES
     ${Header_Files__Utils}
     ${Resource_Files}
     ${Source_Files}
-    ${Source_Files__Libraries__libgfxd}
     ${Source_Files__Yaz0}
     ${Source_Files__Z64}
     ${Source_Files__Z64__ZRoom}
@@ -351,7 +335,6 @@ find_package(PNG REQUIRED)
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../../libultraship/src/resource
     ${CMAKE_CURRENT_SOURCE_DIR}/../../libultraship/include
-	${CMAKE_CURRENT_SOURCE_DIR}/../../ZAPDTR/lib/libgfxd
 	${PNG_PNG_INCLUDE_DIR}/
 	.
 	)

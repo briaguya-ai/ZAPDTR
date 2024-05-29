@@ -14,7 +14,7 @@
 #include "Utils/Path.h"
 #include "Utils/StringHelper.h"
 #include "WarningHandler.h"
-#include "gfxd.h"
+// #include "gfxd.h"
 
 
 #define G_MDSFT_ALPHACOMPARE 0
@@ -1665,260 +1665,260 @@ void ZDisplayList::Opcode_G_ENDDL([[maybe_unused]] const std::string& prefix, ch
 	TextureGenCheck();
 }
 
-static int32_t GfxdCallback_FormatSingleEntry()
-{
-	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
-	gfxd_puts("\t");
-	gfxd_macro_dflt();
-	gfxd_puts(",");
+// static int32_t GfxdCallback_FormatSingleEntry()
+// {
+// 	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
+// 	gfxd_puts("\t");
+// 	gfxd_macro_dflt();
+// 	gfxd_puts(",");
 
-	auto macroId = gfxd_macro_id();
+// 	auto macroId = gfxd_macro_id();
 
-	switch (macroId)
-	{
-	case gfxd_SP1Triangle:
-	case gfxd_SP2Triangles:
-		if (self->lastTexture != nullptr && self->lastTexture->IsColorIndexed() &&
-		    !self->lastTexture->HasTlut())
-		{
-			auto tex = self->lastTexture;
-			auto tlut = self->lastTlut;
+// 	switch (macroId)
+// 	{
+// 	case gfxd_SP1Triangle:
+// 	case gfxd_SP2Triangles:
+// 		if (self->lastTexture != nullptr && self->lastTexture->IsColorIndexed() &&
+// 		    !self->lastTexture->HasTlut())
+// 		{
+// 			auto tex = self->lastTexture;
+// 			auto tlut = self->lastTlut;
 
-			if (Globals::Instance->verbosity >= VerbosityLevel::VERBOSITY_DEBUG)
-			{
-				if (tlut != nullptr)
-					printf("CI texture '%s' (0x%X), TLUT: '%s' (0x%X)\n", tex->GetName().c_str(),
-					       tex->GetRawDataIndex(), tlut->GetName().c_str(),
-					       tlut->GetRawDataIndex());
-				else
-					printf("CI texture '%s' (0x%X), TLUT: null\n", tex->GetName().c_str(),
-					       tex->GetRawDataIndex());
-			}
+// 			if (Globals::Instance->verbosity >= VerbosityLevel::VERBOSITY_DEBUG)
+// 			{
+// 				if (tlut != nullptr)
+// 					printf("CI texture '%s' (0x%X), TLUT: '%s' (0x%X)\n", tex->GetName().c_str(),
+// 					       tex->GetRawDataIndex(), tlut->GetName().c_str(),
+// 					       tlut->GetRawDataIndex());
+// 				else
+// 					printf("CI texture '%s' (0x%X), TLUT: null\n", tex->GetName().c_str(),
+// 					       tex->GetRawDataIndex());
+// 			}
 
-			if (tlut != nullptr && !tex->HasTlut())
-				tex->SetTlut(tlut);
-		}
-		break;
-	}
+// 			if (tlut != nullptr && !tex->HasTlut())
+// 				tex->SetTlut(tlut);
+// 		}
+// 		break;
+// 	}
 
-	// dont print a new line after the last command
-	switch (macroId)
-	{
-	case gfxd_SPEndDisplayList:
-	case gfxd_SPBranchList:
-		break;
+// 	// dont print a new line after the last command
+// 	switch (macroId)
+// 	{
+// 	case gfxd_SPEndDisplayList:
+// 	case gfxd_SPBranchList:
+// 		break;
 
-	default:
-		gfxd_puts("\n");
-		break;
-	}
+// 	default:
+// 		gfxd_puts("\n");
+// 		break;
+// 	}
 
-	return 0;
-}
+// 	return 0;
+// }
 
-static int32_t GfxdCallback_Vtx(uint32_t seg, int32_t count)
-{
-	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
-	uint32_t vtxOffset = Seg2Filespace(seg, self->parent->baseAddress);
+// static int32_t GfxdCallback_Vtx(uint32_t seg, int32_t count)
+// {
+// 	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
+// 	uint32_t vtxOffset = Seg2Filespace(seg, self->parent->baseAddress);
 
-	if (GETSEGNUM(seg) == self->parent->segment)
-	{
-		Declaration* decl;
+// 	if (GETSEGNUM(seg) == self->parent->segment)
+// 	{
+// 		Declaration* decl;
 
-		// Check for vertex intersections from other display lists
-		// TODO: These two could probably be condenced to one...
-		decl = self->parent->GetDeclarationRanged(vtxOffset + (count * 16));
-		if (decl != nullptr)
-		{
-			int32_t diff = decl->address - vtxOffset;
+// 		// Check for vertex intersections from other display lists
+// 		// TODO: These two could probably be condenced to one...
+// 		decl = self->parent->GetDeclarationRanged(vtxOffset + (count * 16));
+// 		if (decl != nullptr)
+// 		{
+// 			int32_t diff = decl->address - vtxOffset;
 
-			if (diff > 0)
-				count = diff / 16;
-			else
-				count = 0;
-		}
+// 			if (diff > 0)
+// 				count = diff / 16;
+// 			else
+// 				count = 0;
+// 		}
 
-		decl = self->parent->GetDeclarationRanged(vtxOffset);
-		if (decl != nullptr)
-		{
-			int32_t diff = decl->address - vtxOffset;
+// 		decl = self->parent->GetDeclarationRanged(vtxOffset);
+// 		if (decl != nullptr)
+// 		{
+// 			int32_t diff = decl->address - vtxOffset;
 
-			if (diff > 0)
-				count = diff / 16;
-			else
-				count = 0;
-		}
+// 			if (diff > 0)
+// 				count = diff / 16;
+// 			else
+// 				count = 0;
+// 		}
 
-		if (count > 0)
-		{
-			std::vector<ZVtx> vtxList;
-			vtxList.reserve(count);
+// 		if (count > 0)
+// 		{
+// 			std::vector<ZVtx> vtxList;
+// 			vtxList.reserve(count);
 
-			uint32_t currentPtr = vtxOffset;
-			for (int32_t i = 0; i < count; i++)
-			{
-				ZVtx vtx(self->parent);
-				vtx.ExtractFromFile(currentPtr);
+// 			uint32_t currentPtr = vtxOffset;
+// 			for (int32_t i = 0; i < count; i++)
+// 			{
+// 				ZVtx vtx(self->parent);
+// 				vtx.ExtractFromFile(currentPtr);
 
-				vtxList.push_back(vtx);
-				currentPtr += 16;
-			}
+// 				vtxList.push_back(vtx);
+// 				currentPtr += 16;
+// 			}
 
-			bool keyAlreadyOccupied = self->vertices.find(vtxOffset) != self->vertices.end();
+// 			bool keyAlreadyOccupied = self->vertices.find(vtxOffset) != self->vertices.end();
 
-			if (self->GetName() == "gSunDL")
-			{
-				for (auto& vtx: vtxList)
-				{
-					vtx.t = (((vtx.t >> 5) - 1) / 2) << 5;
-				}
-			}
+// 			if (self->GetName() == "gSunDL")
+// 			{
+// 				for (auto& vtx: vtxList)
+// 				{
+// 					vtx.t = (((vtx.t >> 5) - 1) / 2) << 5;
+// 				}
+// 			}
 
-			// In some cases a vtxList already exists at vtxOffset. Only override the existing list
-			// if the new one is bigger.
-			if (!keyAlreadyOccupied ||
-			    (keyAlreadyOccupied && vtxList.size() > self->vertices[vtxOffset].size()))
-				self->vertices[vtxOffset] = vtxList;
-		}
-	}
+// 			// In some cases a vtxList already exists at vtxOffset. Only override the existing list
+// 			// if the new one is bigger.
+// 			if (!keyAlreadyOccupied ||
+// 			    (keyAlreadyOccupied && vtxList.size() > self->vertices[vtxOffset].size()))
+// 				self->vertices[vtxOffset] = vtxList;
+// 		}
+// 	}
 
-	self->references.push_back(seg);
+// 	self->references.push_back(seg);
 
-	if (!Globals::Instance->otrMode)
-		gfxd_puts("@r");
+// 	if (!Globals::Instance->otrMode)
+// 		gfxd_puts("@r");
 
-	return 1;
-}
+// 	return 1;
+// }
 
-static int32_t GfxdCallback_Texture(segptr_t seg, int32_t fmt, int32_t siz, int32_t width,
-                                    int32_t height, [[maybe_unused]] int32_t pal)
-{
-	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
-	uint32_t texOffset = Seg2Filespace(seg, self->parent->baseAddress);
+// static int32_t GfxdCallback_Texture(segptr_t seg, int32_t fmt, int32_t siz, int32_t width,
+//                                     int32_t height, [[maybe_unused]] int32_t pal)
+// {
+// 	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
+// 	uint32_t texOffset = Seg2Filespace(seg, self->parent->baseAddress);
 
-	self->lastTexWidth = width;
-	self->lastTexHeight = height;
-	self->lastTexAddr = texOffset;
-	self->lastTexSeg = seg;
-	self->lastTexFmt = static_cast<F3DZEXTexFormats>(fmt);
-	self->lastTexSiz = static_cast<F3DZEXTexSizes>(siz);
-	self->lastTexLoaded = true;
-	self->lastTexIsPalette = false;
+// 	self->lastTexWidth = width;
+// 	self->lastTexHeight = height;
+// 	self->lastTexAddr = texOffset;
+// 	self->lastTexSeg = seg;
+// 	self->lastTexFmt = static_cast<F3DZEXTexFormats>(fmt);
+// 	self->lastTexSiz = static_cast<F3DZEXTexSizes>(siz);
+// 	self->lastTexLoaded = true;
+// 	self->lastTexIsPalette = false;
 
-	self->TextureGenCheck();
+// 	self->TextureGenCheck();
 
-	std::string texName;
-	Globals::Instance->GetSegmentedPtrName(seg, self->parent, "", texName, self->parent->workerID);
+// 	std::string texName;
+// 	Globals::Instance->GetSegmentedPtrName(seg, self->parent, "", texName, self->parent->workerID);
 
-	gfxd_puts(texName.c_str());
+// 	gfxd_puts(texName.c_str());
 
-	return 1;
-}
+// 	return 1;
+// }
 
-static int32_t GfxdCallback_Palette(uint32_t seg, [[maybe_unused]] int32_t idx, int32_t count)
-{
-	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
-	uint32_t palOffset = Seg2Filespace(seg, self->parent->baseAddress);
+// static int32_t GfxdCallback_Palette(uint32_t seg, [[maybe_unused]] int32_t idx, int32_t count)
+// {
+// 	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
+// 	uint32_t palOffset = Seg2Filespace(seg, self->parent->baseAddress);
 
-	self->lastTexWidth = sqrt(count);
-	self->lastTexHeight = sqrt(count);
-	self->lastTexAddr = palOffset;
-	self->lastTexSeg = seg;
-	self->lastTexSiz = F3DZEXTexSizes::G_IM_SIZ_16b;
-	self->lastTexFmt = F3DZEXTexFormats::G_IM_FMT_RGBA;
-	self->lastTexLoaded = true;
-	self->lastTexIsPalette = true;
+// 	self->lastTexWidth = sqrt(count);
+// 	self->lastTexHeight = sqrt(count);
+// 	self->lastTexAddr = palOffset;
+// 	self->lastTexSeg = seg;
+// 	self->lastTexSiz = F3DZEXTexSizes::G_IM_SIZ_16b;
+// 	self->lastTexFmt = F3DZEXTexFormats::G_IM_FMT_RGBA;
+// 	self->lastTexLoaded = true;
+// 	self->lastTexIsPalette = true;
 
-	self->TextureGenCheck();
+// 	self->TextureGenCheck();
 
-	std::string palName;
-	Globals::Instance->GetSegmentedPtrName(seg, self->parent, "", palName, self->parent->workerID);
+// 	std::string palName;
+// 	Globals::Instance->GetSegmentedPtrName(seg, self->parent, "", palName, self->parent->workerID);
 
-	gfxd_puts(palName.c_str());
+// 	gfxd_puts(palName.c_str());
 
-	return 1;
-}
+// 	return 1;
+// }
 
-static int32_t GfxdCallback_DisplayList(uint32_t seg)
-{
-	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
-	uint32_t dListOffset = GETSEGOFFSET(seg);
-	uint32_t dListSegNum = GETSEGNUM(seg);
+// static int32_t GfxdCallback_DisplayList(uint32_t seg)
+// {
+// 	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
+// 	uint32_t dListOffset = GETSEGOFFSET(seg);
+// 	uint32_t dListSegNum = GETSEGNUM(seg);
 
-	std::string dListName = "";
-	bool addressFound =
-		Globals::Instance->GetSegmentedPtrName(seg, self->parent, "Gfx", dListName, false, self->parent->workerID);
+// 	std::string dListName = "";
+// 	bool addressFound =
+// 		Globals::Instance->GetSegmentedPtrName(seg, self->parent, "Gfx", dListName, false, self->parent->workerID);
 
-	if (!addressFound)
-	{
-		if (self->parent->segment == dListSegNum)
-		{
-			ZDisplayList* newDList = new ZDisplayList(self->parent);
-			newDList->ExtractFromBinary(
-				dListOffset,
-				self->GetDListLength(self->parent->GetRawData(), dListOffset, self->dListType));
-			newDList->SetName(newDList->GetDefaultName(self->parent->GetName()));
-			self->otherDLists.push_back(newDList);
-			dListName = newDList->GetName();
-		}
-		else
-		{
-			Globals::Instance->WarnHardcodedPointer(seg, self->parent, self,
-			                                        self->GetRawDataIndex());
-		}
-	}
+// 	if (!addressFound)
+// 	{
+// 		if (self->parent->segment == dListSegNum)
+// 		{
+// 			ZDisplayList* newDList = new ZDisplayList(self->parent);
+// 			newDList->ExtractFromBinary(
+// 				dListOffset,
+// 				self->GetDListLength(self->parent->GetRawData(), dListOffset, self->dListType));
+// 			newDList->SetName(newDList->GetDefaultName(self->parent->GetName()));
+// 			self->otherDLists.push_back(newDList);
+// 			dListName = newDList->GetName();
+// 		}
+// 		else
+// 		{
+// 			Globals::Instance->WarnHardcodedPointer(seg, self->parent, self,
+// 			                                        self->GetRawDataIndex());
+// 		}
+// 	}
 
-	gfxd_puts(dListName.c_str());
+// 	gfxd_puts(dListName.c_str());
 
-	return 1;
-}
+// 	return 1;
+// }
 
-static int32_t GfxdCallback_Matrix(uint32_t seg)
-{
-	std::string mtxName;
-	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
+// static int32_t GfxdCallback_Matrix(uint32_t seg)
+// {
+// 	std::string mtxName;
+// 	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
 
-	bool addressFound =
-		Globals::Instance->GetSegmentedPtrName(seg, self->parent, "Mtx", mtxName, false, self->parent->workerID);
+// 	bool addressFound =
+// 		Globals::Instance->GetSegmentedPtrName(seg, self->parent, "Mtx", mtxName, false, self->parent->workerID);
 
-	if (!addressFound)
-	{
-		if (GETSEGNUM(seg) == self->parent->segment)
-		{
-			Declaration* decl =
-				self->parent->GetDeclaration(Seg2Filespace(seg, self->parent->baseAddress));
-			if (decl == nullptr)
-			{
-				ZMtx mtx(self->parent);
-				mtx.SetName(mtx.GetDefaultName(self->GetName()));
-				mtx.ExtractFromFile(Seg2Filespace(seg, self->parent->baseAddress));
-				mtx.DeclareVar(self->GetName(), "");
+// 	if (!addressFound)
+// 	{
+// 		if (GETSEGNUM(seg) == self->parent->segment)
+// 		{
+// 			Declaration* decl =
+// 				self->parent->GetDeclaration(Seg2Filespace(seg, self->parent->baseAddress));
+// 			if (decl == nullptr)
+// 			{
+// 				ZMtx mtx(self->parent);
+// 				mtx.SetName(mtx.GetDefaultName(self->GetName()));
+// 				mtx.ExtractFromFile(Seg2Filespace(seg, self->parent->baseAddress));
+// 				mtx.DeclareVar(self->GetName(), "");
 
-				mtx.GetSourceOutputCode(self->GetName());
-				self->mtxList.push_back(mtx);
-				mtxName = "&" + mtx.GetName();
-			}
-		}
-		else
-		{
-			Globals::Instance->WarnHardcodedPointer(seg, self->parent, self,
-			                                        self->GetRawDataIndex());
-		}
-	}
+// 				mtx.GetSourceOutputCode(self->GetName());
+// 				self->mtxList.push_back(mtx);
+// 				mtxName = "&" + mtx.GetName();
+// 			}
+// 		}
+// 		else
+// 		{
+// 			Globals::Instance->WarnHardcodedPointer(seg, self->parent, self,
+// 			                                        self->GetRawDataIndex());
+// 		}
+// 	}
 
-	gfxd_puts(mtxName.c_str());
+// 	gfxd_puts(mtxName.c_str());
 
-	return 1;
-}
+// 	return 1;
+// }
 
 void ZDisplayList::DeclareReferences(const std::string& prefix)
 {
 	std::string sourceOutput;
 
-	if (Globals::Instance->useLegacyZDList)
-		sourceOutput += ProcessLegacy(prefix);
-	else
-		sourceOutput += ProcessGfxDis(prefix);
+	// if (Globals::Instance->useLegacyZDList)
+	// 	sourceOutput += ProcessLegacy(prefix);
+	// else
+	// 	sourceOutput += ProcessGfxDis(prefix);
 
 	// Iterate through our vertex lists, connect intersecting lists.
 	if (vertices.size() > 0)
@@ -2098,38 +2098,38 @@ std::string ZDisplayList::ProcessLegacy(const std::string& prefix)
 	return sourceOutput;
 }
 
-std::string ZDisplayList::ProcessGfxDis([[maybe_unused]] const std::string& prefix)
-{
-	std::string sourceOutput;
+// std::string ZDisplayList::ProcessGfxDis([[maybe_unused]] const std::string& prefix)
+// {
+// 	std::string sourceOutput;
 
-	OutputFormatter outputformatter;
-	int32_t dListSize = instructions.size() * sizeof(instructions[0]);
+// 	OutputFormatter outputformatter;
+// 	int32_t dListSize = instructions.size() * sizeof(instructions[0]);
 
-	gfxd_input_buffer(instructions.data(), dListSize);
-	gfxd_endian(gfxd_endian_little, sizeof(uint64_t));  // tell gfxdis what format the data is
+// 	gfxd_input_buffer(instructions.data(), dListSize);
+// 	gfxd_endian(gfxd_endian_little, sizeof(uint64_t));  // tell gfxdis what format the data is
 
-	gfxd_macro_fn(GfxdCallback_FormatSingleEntry);  // format for each command entry
-	gfxd_vtx_callback(GfxdCallback_Vtx);            // handle vertices
-	gfxd_timg_callback(GfxdCallback_Texture);       // handle textures
-	gfxd_tlut_callback(GfxdCallback_Palette);       // handle palettes
-	gfxd_dl_callback(GfxdCallback_DisplayList);     // handle child display lists
-	gfxd_mtx_callback(GfxdCallback_Matrix);         // handle matrices
-	gfxd_output_callback(
-		outputformatter.StaticWriter());  // convert tabs to 4 spaces and enforce 120 line limit
+// 	gfxd_macro_fn(GfxdCallback_FormatSingleEntry);  // format for each command entry
+// 	gfxd_vtx_callback(GfxdCallback_Vtx);            // handle vertices
+// 	gfxd_timg_callback(GfxdCallback_Texture);       // handle textures
+// 	gfxd_tlut_callback(GfxdCallback_Palette);       // handle palettes
+// 	gfxd_dl_callback(GfxdCallback_DisplayList);     // handle child display lists
+// 	gfxd_mtx_callback(GfxdCallback_Matrix);         // handle matrices
+// 	gfxd_output_callback(
+// 		outputformatter.StaticWriter());  // convert tabs to 4 spaces and enforce 120 line limit
 
-	gfxd_enable(gfxd_emit_dec_color);  // use decimal for colors
+// 	gfxd_enable(gfxd_emit_dec_color);  // use decimal for colors
 
-	// set microcode. see gfxd.h for more options.
-	gfxd_target(gfxd_f3dex2);
+// 	// set microcode. see gfxd.h for more options.
+// 	gfxd_target(gfxd_f3dex2);
 
-	gfxd_udata_set(this);
-	gfxd_execute();                               // generate display list
-	sourceOutput += outputformatter.GetOutput();  // write formatted display list
+// 	gfxd_udata_set(this);
+// 	gfxd_execute();                               // generate display list
+// 	sourceOutput += outputformatter.GetOutput();  // write formatted display list
 
-	MergeConnectingVertexLists();
+// 	MergeConnectingVertexLists();
 
-	return sourceOutput;
-}
+// 	return sourceOutput;
+// }
 
 void ZDisplayList::MergeConnectingVertexLists()
 {
