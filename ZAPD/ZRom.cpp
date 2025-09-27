@@ -17,7 +17,7 @@ namespace fs = std::filesystem;
 #define __bswap_32 _byteswap_ulong
 #define bswap_32 _byteswap_ulong
 #endif
-#if defined SDL_PLATFORM_APPLE
+#if defined __APPLE__
 #define __bswap32 __builtin_bswap32
 #define bswap32 __builtin_bswap32
 #endif
