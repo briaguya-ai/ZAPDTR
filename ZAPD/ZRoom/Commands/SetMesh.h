@@ -44,8 +44,8 @@ protected:
 class RoomShapeImageMultiBgEntry : public ZResource
 {
 public:
-	uint16_t unk_00;
-	uint8_t id;
+	uint16_t unk_00 = 0;
+	uint8_t id = 0;
 	segptr_t source;
 	uint32_t unk_0C;
 	uint32_t tlut;
