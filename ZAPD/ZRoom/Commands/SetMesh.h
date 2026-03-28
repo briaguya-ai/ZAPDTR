@@ -141,7 +141,7 @@ public:
 class SetMesh : public ZRoomCommand
 {
 public:
-	uint8_t data;
+	uint8_t data = 0;
 	uint8_t meshHeaderType;
 	std::shared_ptr<PolygonTypeBase> polyType;
 
